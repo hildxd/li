@@ -29,7 +29,7 @@ pub struct CsvOpts {
     #[arg(short, long, default_value_t = ',')]
     pub delimiter: char,
 
-    #[arg(short, long, default_value_t = true)]
+    #[arg(long, default_value_t = true)]
     pub header: bool,
 }
 
