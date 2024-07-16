@@ -1,9 +1,11 @@
+use anyhow::Result;
 use clap::Parser;
-use template::{process_csv, Opts, SubCommand};
+use li::{process_csv, Opts, SubCommand};
 
-fn main() {
+fn main() -> Result<()> {
     let opts = Opts::parse();
     match opts.cmd {
         SubCommand::Csv(opts) => process_csv(opts),
-    };
+    }?;
+    Ok(())
 }
