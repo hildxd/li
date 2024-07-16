@@ -1,7 +1,9 @@
 use core::fmt;
-use std::{fmt::Display, path::Path, str::FromStr};
+use std::{fmt::Display, str::FromStr};
 
 use clap::Parser;
+
+use crate::verify_input_file;
 
 #[derive(Debug, Parser)]
 pub struct CsvOpts {
@@ -50,12 +52,5 @@ impl FromStr for Format {
 impl Display for Format {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", Into::<&str>::into(*self))
-    }
-}
-
-fn verify_input_file(filename: &str) -> Result<String, &'static str> {
-    match Path::new(filename).exists() {
-        true => Ok(filename.into()),
-        false => Err("File does not exist"),
     }
 }
