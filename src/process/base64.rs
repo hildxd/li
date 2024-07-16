@@ -1,14 +1,20 @@
 use std::{fs::File, io::Read};
 
+use anyhow::Result;
 use base64::prelude::*;
 
 use crate::Base64Format;
 
-pub fn process_encode(input: &str, format: Base64Format) -> anyhow::Result<()> {
-    let mut reader: Box<dyn Read> = match input {
+fn get_reader(input: &str) -> Result<Box<dyn Read>> {
+    let reader: Box<dyn Read> = match input {
         "-" => Box::new(std::io::stdin()),
         _ => Box::new(File::open(input)?),
     };
+    Ok(reader)
+}
+
+pub fn process_encode(input: &str, format: Base64Format) -> anyhow::Result<()> {
+    let mut reader = get_reader(input)?;
     let mut buf = Vec::new();
     reader.read_to_end(&mut buf)?;
     let encoded = match format {
@@ -20,10 +26,7 @@ pub fn process_encode(input: &str, format: Base64Format) -> anyhow::Result<()> {
 }
 
 pub fn process_decode(input: &str, format: Base64Format) -> anyhow::Result<()> {
-    let mut reader: Box<dyn Read> = match input {
-        "-" => Box::new(std::io::stdin()),
-        _ => Box::new(File::open(input)?),
-    };
+    let mut reader = get_reader(input)?;
     let mut buf = String::new();
     reader.read_to_string(&mut buf)?;
     let buf = buf.trim();
@@ -34,4 +37,21 @@ pub fn process_decode(input: &str, format: Base64Format) -> anyhow::Result<()> {
     let decoded = String::from_utf8(decoded)?;
     println!("{}", decoded);
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_encode() {
+        let input = "Cargo.toml";
+        assert!(process_encode(input, Base64Format::Standard).is_ok());
+    }
+
+    #[test]
+    fn test_decode() {
+        let input = "fixtures/b64.txt";
+        assert!(process_decode(input, Base64Format::Standard).is_ok());
+    }
 }
