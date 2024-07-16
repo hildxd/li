@@ -1,7 +1,7 @@
 use clap::Parser;
 #[derive(Debug, Parser)]
 pub struct GenPassOpts {
-    #[arg(long, default_value = "16")]
+    #[arg(long, default_value = "12")]
     pub length: usize,
 
     #[arg(short, long, default_value_t = true)]
