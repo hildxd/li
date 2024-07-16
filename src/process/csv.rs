@@ -22,6 +22,10 @@ pub fn process_csv(opts: CsvOpts) -> Result<()> {
         Format::Json => serde_json::to_string_pretty(&ret)?,
         Format::Yaml => serde_yaml::to_string(&ret)?,
     };
-    fs::write(opts.output, content)?;
+    let output = match opts.output {
+        Some(output) => output,
+        None => format!("output.{}", opts.format),
+    };
+    fs::write(output, content)?;
     Ok(())
 }

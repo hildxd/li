@@ -1,3 +1,3 @@
 mod csv;
 
-pub use self::csv::*;
+pub use csv::process_csv;
