@@ -24,8 +24,9 @@ pub fn process_decode(input: &str, format: Base64Format) -> anyhow::Result<()> {
         "-" => Box::new(std::io::stdin()),
         _ => Box::new(File::open(input)?),
     };
-    let mut buf = Vec::new();
-    reader.read_to_end(&mut buf)?;
+    let mut buf = String::new();
+    reader.read_to_string(&mut buf)?;
+    let buf = buf.trim();
     let decoded = match format {
         Base64Format::Standard => BASE64_STANDARD.decode(buf)?,
         Base64Format::Url => BASE64_URL_SAFE.decode(buf)?,
