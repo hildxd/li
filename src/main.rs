@@ -2,7 +2,7 @@ use anyhow::Result;
 use clap::Parser;
 use li::{
     process_csv, process_decode, process_encode, process_genpass, Base64SubCommand, Opts,
-    SubCommand,
+    SubCommand, TextSubCommand,
 };
 
 fn main() -> Result<()> {
@@ -13,6 +13,10 @@ fn main() -> Result<()> {
         SubCommand::Base64(subcmd) => match subcmd {
             Base64SubCommand::Encode(opts) => process_encode(&opts.input, opts.format),
             Base64SubCommand::Decode(opts) => process_decode(&opts.input, opts.format),
+        },
+        SubCommand::Text(subcmd) => match subcmd {
+            TextSubCommand::Sign(opts) => todo!(),
+            TextSubCommand::Verify(opts) => todo!(),
         },
     }
 }
